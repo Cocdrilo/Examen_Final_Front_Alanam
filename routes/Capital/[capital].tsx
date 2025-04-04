@@ -15,12 +15,21 @@ export const handler: Handlers = {
 
         try{
             const country_url = "https://api.api-ninjas.com/v1/city?name="
+            const temp_url = "https://api.api-ninjas.com/v1/weather?lat="
+            const lat_url = "https://api.api-ninjas.com/v1/geocoding?city="
+            console.log(country)
             const data = await Axios.get(country_url + country,
                 {headers: {'X-Api-Key': Deno.env.get("API_NINJA_KEY")}})
+            const data3 =await Axios.get(lat_url + country,
+                {headers: {'X-Api-Key': Deno.env.get("API_NINJA_KEY")}})
+            console.log(temp_url + data3.data[0].latitude + "&lon" +data3.data[0].longitude)
+            const data2 = await Axios.get(temp_url + data3.data[0].latitude + "&lon=" +data3.data[0].longitude,
+                {headers: {'X-Api-Key': Deno.env.get("API_NINJA_KEY")}})
+            console.log(data2)
             const city:CapitalData = {
                 name:country,
                 country:data.data[0].country,
-                temperature : 0
+                temperature : data2.data.temp
 
             }
             console.log(city)
@@ -31,6 +40,7 @@ export const handler: Handlers = {
         }
 
     }
+
 }
 
 
